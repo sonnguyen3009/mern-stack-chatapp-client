@@ -150,16 +150,16 @@ function App() {
 
       foundUser.messages.push({
         message,
-        fromSelf: false,
+        fromSelf: false, //This message send to current user, set to false so when render, we can recognize it not sent by current user
       })
 
       if (foundUser) {
         if (selectedUser) {
           if (foundUser.userID !== selectedUser.userID) {
-            foundUser.hasNewMessages = true
+            foundUser.hasNewMessages = true //msg not come from selecteduser, so set to true so we can display notification
           }
         } else {
-          foundUser.hasNewMessages = true
+          foundUser.hasNewMessages = true //No selecteduser, set to true to display notification
         }
 
         allUsers[index] = foundUser
@@ -174,11 +174,13 @@ function App() {
 
   const handleUsernameClick = (user) => {
     if (user.self || !user.connected) return
+    //When user click to selectedUser, he already read message, so no new message, set to false
     setSelectedUser({ ...user, hasNewMessages: false })
 
     let allUsers = users
     let index = allUsers.findIndex((u) => u.userID === user.userID)
     let foundUser = allUsers[index]
+    //When user click to selectedUser, he already read message, so no new message, set to false
     foundUser.hasNewMessages = false
 
     allUsers[index] = foundUser
@@ -196,8 +198,8 @@ function App() {
       let updated = selectedUser
       updated.messages.push({
         message: privateMessage,
-        fromSelf: true,
-        hasNewMessages: false,
+        fromSelf: true, //When render message, use to identify which message belong to which user
+        hasNewMessages: false, //When user click to selectedUser, he already read message, so no new message, set to false
       })
       setSelectedUser(updated)
       setPrivateMessage('')
